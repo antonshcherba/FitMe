@@ -40,6 +40,37 @@ class RegimeDayController: UITableViewController {
         showAddMealForm()
     }
     
-
+    func showAddMealForm() {
+        let form = UIAlertController(title: "Add meal", message: "Enter meal name?", preferredStyle: .Alert)
+        
+        form.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = "Meal name"
+        }
+        
+        var mealName = ""
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .Default) { (action) -> Void in
+            println(action)
+            let meal = Meal()
+            mealName = (form.textFields?[0] as! UITextField).text
+            meal.mealName = mealName
+            
+            var random = Int(arc4random_uniform(1000))
+            meal.carboCount = random
+            meal.fatsCount = random
+            meal.proteinCount = random
+            meal.kilocalorieCount = random
+            
+            self.regime.addMeal(meal)
+            self.tableView.reloadData()
+            
+        }
+        form.addAction(cancelAction)
+        form.addAction(okAction)
+        
+        self.presentViewController(form, animated: true) { () -> Void in
+            println("show add view controller")
+        }
+    }
     
 }
